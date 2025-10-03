@@ -8,7 +8,7 @@ library("terra")
 theme_set(theme_bw())
 
 #what folder do all the runs to be analyzed live in?
-scenario_folder <- "E:/ISRO LANDIS/Model runs"
+# scenario_folder <- "E:/ISRO LANDIS/Model runs"
 # scenario_folder <- "C:/Users/swflake/Documents/LANDIS inputs/"
 # scenario_folder <- "./Models/Model templates"
 
@@ -17,9 +17,7 @@ scenario_folder <- "./Models/v2 model templates"
 
 scenarios <- list.dirs(scenario_folder, recursive = FALSE) #%>%
 # `[`(!(grepl("canesm", .)))
-# scenarios <- scenarios[c(1, 4, 5, 6)]
-
-scenarios <- scenarios[1]
+scenarios <- scenarios[c(1:4, 6)]
 
 #some helper functions
 read_plus <- function(flnm) {
@@ -77,16 +75,15 @@ spp <- unique(biomass_summaries$Species)
 for(sp in spp){
   
 p <- ggplot(data = filter(biomass_summaries, Species == sp), 
-         mapping = aes(x = Time, y = Biomass/100, colour = browse)) + 
+         mapping = aes(x = Time, y = Biomass/100)) + 
     geom_point() + 
     labs(title = paste(paste0(sp, " aboveground biomass")),
          subtitle = "by browse scenario and climate scenario",
          y = "Average AGB (Mg/ha)", x = "Timestep") + 
-    geom_smooth() +
-  facet_wrap(facets = "climate")
+    geom_line() +
+  facet_wrap(facets = "run_name")
   # geom_smooth(aes(linetype = run_name))
 plot(p)
-  
 }
 
 
@@ -156,7 +153,7 @@ biomass_layers <- list.files(paste0(scenarios, "/", "biomass"), full.names = TRU
 biomass_df <- data.frame(biomass_layers = biomass_layers,
                          species = basename(biomass_layers) %>%
                            str_extract(., "[^-]+"),
-                         years = str_extract_all(biomass_layers,"[0-9]+(?=\\.)") %>% unlist())
+                         years = str_extract_all(basename(biomass_layers),"[0-9]+(?=\\.)") %>% unlist())
 
 species_list <- unique(biomass_df$species)
 year_list <- unique(biomass_df$years)
@@ -164,4 +161,4 @@ sp <- species_list[1]
 for(sp in species_list){
   test <- rast(biomass_df[biomass_df$species == sp, "biomass_layers"])
 }
-plot(test[[1:9]])
+plot(test[[1:4]])

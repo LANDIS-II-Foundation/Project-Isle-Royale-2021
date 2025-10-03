@@ -1,0 +1,95 @@
+LandisData "BDA Agent"
+
+BDAAgentName		defoliator
+BDPCalibrator		1
+SRDMode			mean
+StartYear		2
+
+>>----------------------------------
+>> BDA DISTURBANE REGIME PARAMETERS
+>>----------------------------------
+
+>>-------- Regional Outbreak Inputs -------------
+OutbreakPattern CyclicNormal<< CyclicNormal or CyclicUniform, or ClimateLibrary 
+Mean			7
+StDev			2
+TimeSinceLastEpidemic	5		<<years
+TemporalType 		variablepulse	<<pulse or variablepulse
+MinROS			0
+MaxROS			2
+
+>>-------- Dispersal Inputs ----------------------
+Dispersal		no		<<yes or no
+DispersalRate		500		<<meters/year
+EpidemicThresh		0.5
+InitialEpicenterNum	0
+OutbreakEpicenterCoeff	0.01
+OutbreakEpicenterThresh 0.0
+SeedEpicenter		no		<<yes or no
+SeedEpicenterMax	3
+SeedEpicenterCoeff	0.5
+DispersalTemplate	MaxRadius	<<MaxRadius, 4N,
+					<<8N, 12N, or 24N
+
+>>-------- Neighborhood Resource Inputs -----------
+NeighborFlag	yes	<<yes or no
+NeighborSpeedUp	none	<<none, 2x, 3x, 
+			<<or 4x
+NeighborRadius	1000	<<meters
+NeighborShape	uniform	<<uniform, linear, 
+			<<or gaussian
+NeighborWeight	1
+
+>>-- Intensity Class Thresholds --
+>>IntensityClass1_BDP 	0.0 -- Hardwired value
+IntensityClass2_BDP 	0.5
+IntensityClass3_BDP 	0.8
+
+>>EcoregionModifiers
+>> not needed here; only one ecoregion
+>>Ecoregion	Modifier
+>>eco1		0.16
+>>eco2		-0.16
+
+DisturbanceModifiers
+>>Type	Duration	Value
+
+ClimateModifiers
+>> Var 	Source 	Threshold 	Months 	Aggregation 	LagYears Modifier
+>>  temp 	Library >30 		7 	Average 	0 	-99.0
+>>  temp	Library	<4.4		5	Average		0	-99.0
+>>temp	Library	<-11.3		1-2	Average		0	-99.0
+
+BDASpeciesParameters
+>> 								| Susceptibility 						 									  	 | Special
+>>Species 	MinorHost 		2ndHost 		MajorHost		| Class3 			Class2 			Class1 			 | Dead
+>>Name 		Age SRDProb  	Age SRDProb 	Age SRDProb 	| Age MortProb 		Age MortProb 	Age MortProb 	 | Fuel?
+>> -----------------------------------------------------------------------------
+>>see Davidson et al. 1999 review for rankings of susceptibility
+>> mortality comes from "fair" condition trees in Herrick and Gansner
+>>reduced mortality to half of previous values, because we were seeing too much mortality. SF 2024-9-30
+ACRU		0	.12				20	.25		40	0.5	  			20	0.11		20	0.095		50	0.07			no
+ACSA3		0	.12				20	.25		40	0.5	  			20	0.11		20	0.095		50	0.07			no
+ACSP2		0	.12				20	.25		40	0.5	  			20	0.11		20	0.095		50	0.07			no
+ALIN2		0	.12				20	.25		40	0.5	  			20	0.11		20	0.095		50	0.07			no	
+BEPA		0	.12				20	.25		40	0.5	  			20	0.11		20	0.095		50	0.07			no	
+CRDO2		0	.12				20	.25		40	0.5	  			20	0.11		20	0.095		50	0.07			no	
+LALA		0	.25				20	.5		40	1.0	 			11	0.22		20	0.155		50	0.085			no  
+PIGL		0	.12				20	.25		40	0.5	  			20	0.11		20	0.095		50	0.07			no	
+POGR4		0	.25				20	.5		40	1.0	 			11	0.22		20	0.155		50	0.085			no  
+POTR5		0	.25				20	.5		40	1.0	 			11	0.22		20	0.155		50	0.085			no  
+POBA2		0	.25				20	.5		40	1.0	 			11	0.22		20	0.155		50	0.085			no  
+PRVI		0	.12				20	.25		40	0.5	  			20	0.11		20	0.095		50	0.07			no	
+QURU		0	.25				20	.5		40	1.0	 			11	0.22		20	0.155		50	0.085			no  
+PIST		0	.12				20	.25		40	0.5	  			20	0.11		20	0.095		50	0.07			no	
+PIRE 		0	.12				20	.25		40	0.5	  			20	0.11		20	0.095		50	0.07			no	
+PIBA2		0	.12				20	.25		40	0.5	  			20	0.11		20	0.095		50	0.07			no	
+SODE3		0	.12				20	.25		40	0.5	  			20	0.11		20	0.095		50	0.07			no
+
+
+IgnoredSpecies
+ABBA
+BEAL2
+FRNI
+
+

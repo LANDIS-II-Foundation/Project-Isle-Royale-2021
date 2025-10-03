@@ -1,0 +1,33 @@
+ LandisData Scenario
+
+Duration 40
+
+Species 		"../../LANDIS inputs/other inputs/species_new.txt"
+
+Ecoregions 		"../../LANDIS inputs/NECN files/ecoregions.txt"
+EcoregionsMap 		"../../LANDIS inputs/input rasters/ecoregions_inv.tif"
+
+CellLength 60 << meters
+
+>> Succession Extension Initialization File
+>> -------------------- -------------------
+
+"NECN Succession"	"NECN_Succession - current - v7.txt"
+
+
+>> Disturbance Extensions Initialization File
+>> ---------------------- -------------------
+     	"Biomass Browse"	"../../LANDIS inputs/browse/BiomassBrowse_full_run_v2.txt"
+>>	"Base Wind"		"../../LANDIS inputs/other inputs/BaseWind.txt"
+>>	"Base BDA"		"../../LANDIS inputs/bda/base-BDA-input2.txt"
+>>	"SCRAPPLE"		"../../LANDIS inputs/scrpple/scrpple_input_v1 - nofire.txt"
+
+
+DisturbancesRandomOrder no
+
+>> Output Extensions Initialization File
+>> ----------------- -------------------
+    "Output Biomass Community"		"../../LANDIS inputs/other inputs/output_Biomass_Community.txt"
+    "Output Biomass"			"../../LANDIS inputs/other inputs/biomassoutput_20.txt"
+
+>>RandomNumberSeed 4,357

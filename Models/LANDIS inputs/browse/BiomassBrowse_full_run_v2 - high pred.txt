@@ -1,0 +1,85 @@
+LandisData  "Biomass Browse"
+
+Timestep 1
+
+<< Species Inputs >>
+SpeciesTable
+>>					--GrowthReduction--     ----Mortality-----     Biomass
+>> Name		Preference		Threshold	Max		Threshold	Max      Max
+>> --------	----------		---------	---		---------	---     -------
+ABBA		0.15			0.2			0.4		0.8		0.1   	8000
+ACRU		0.3				0.2			0.4		0.8		0.1   	6000
+ACSA3		0.15			0.2			0.4		0.8		0.1   	6000
+ACSP2		0.3				0.3			0.4		0.8		0.1   	8000
+ALIN2		0				0.7			0.2		0.95	0.1		0    >>	some sources might confuse with green alder?
+BEAL2		0.15			0.2			0.6		0.8		0.1   	8000
+BEPA		0.3				0.5			0.4		0.9		0.1  	8000 >>increased from 0.25 to 0.3
+CRDO2		0.1				0.5			0.4		0.9		0.1		8000
+FRNI		0				0			1		0.8		0.1   	0
+LALA		0				0			1		0.8		0.1   	0
+PIGL		0				0			1		0.8		0.1  	0
+PIMA		0				0			1		0.8		0.1   	0
+PIBA2		0				0			1		0.8		0.1  	0
+PIRE		0				0			1		0.8		0.1  	0
+PIST		0.05       		0.2			0.6		0.8		0.1   	8000
+POBA2		0.30			0.5			0.4		0.9		0.1   	12000
+POGR4		0.30			0.5			0.4		0.9		0.1   	12000
+POTR5		0.35			0.5			0.4		0.9		0.1   	12000
+PRVI		0.15			0.4			0.3		0.9		0.1   	8000 >>lowered from 0.2 to 0.15
+QURU		0.05			0.3			0.4		0.8		0.1   	8000
+SODE3		0.30			0.3			0.6		0.9		0.1		8000
+THOC2		0.05			0.3			0.4		0.8		0.1   	6000
+Shrub		0.25			0.5			0.4		0.9		0.1		3000
+>> add pincherry and juneberry?
+>> add willow? 
+>> add non-preferred shrubs (e.g. hazel, cranberry) neutral-
+
+<< Browser population Inputs >>
+ZoneMap  "../../LANDIS inputs/input rasters/ecoregions_inv.tif" <<same as ecoregions right now; every active cell can be browsed. sf 2021-12-20
+BrowseMethod "Population" <<must be either "Population" or "BDI"
+DefinedPopulationFile	"../../LANDIS inputs/browse/DefinedUngulatePop_2020.txt"  << User-defined population; must contain year-0 data which can be filler data
+DynamicPopulation  << Optional.  If exists, then the next 8 parameters must be input
+RMin 0.05 <<changed from 0.15
+RMax 0.25		
+MortalityMin 0
+MortalityMax 0.1
+PredationMin 0.07
+PredationMax 0.15
+HarvestMin 0.0
+HarvestMax 0.0
+
+
+
+
+<< Forage Inputs >>
+ConsumptionRate  2327 << kg/yr/individual
+ANPPForageProp		0.66	<<Prop of ANPP that counts as forage
+MinBrowsePropinReach	0.3	<<Min prop of browse within reach for a cohort to be browsed. Prevents larger cohorts from being browsed
+BrowseBiomassThresholdMin	0.06	<<Proportion of ecoregion max biomass when cohort begins to escape browse; cohorts smaller than this threshold are completely reachable as forage
+BrowseBiomassThresholdMax	0.12	<<Proportion of ecoregion max biomass above which cohorts completely escape browse; also controls maximum forage possible per cell
+EscapeBrowsePropLong	0.3	<<Prop of longevity when browse is escaped
+
+<< Options >>
+CalibrateMode OFF << Default is OFF
+GrowthReduction	ON  << Default is ON
+Mortality	ON  << Default is ON
+CountNonForageinSitePref	TRUE	<< Default is FALSE
+UseInitBiomassAsForage		TRUE	<< Default is FALSE
+ForageInReachMethod	"LinearEachCohort" <<Must be either "LinearEachCohort" or "Ordered"; if omitted, "Ordered" is used by default
+
+<< HSI Inputs >>
+<< Component		Neighborhood >>
+<< ---------		------------
+ForageQuantity		500		<< ForageQuantity and/or SitePreference
+SitePreference		500
+
+
+<< Output Maps >>
+SitePrefMapNames  		browse/SitePref_{timestep}.gis
+SiteForageMapNames  		browse/SiteForage_{timestep}.gis
+SiteHSIMapNames			browse/HSI_{timestep}.gis
+SitePopulationMapNames		browse/Pop_{timestep}.gis
+BiomassRemovedMapNames  	browse/BioRemoved_{timestep}.gis
+
+<< Output Logs >>
+LogFile  browse/browse_log.csv

@@ -1,0 +1,10 @@
+LandisData "Biomass Insects"
+
+Timestep	1
+
+MapNames	Insects/{insectName}-{timestep}.img
+
+LogFile		Insects/Insect-log.csv
+
+InsectInputFiles	"../../LANDIS inputs/insects/spongy_moth.txt"
+

@@ -8,11 +8,47 @@ theme_set(theme_bw())
 theme_update(panel.grid.minor = element_blank(),
              strip.background = element_rect(fill = "white"))
 
-# scenario_folder <- "E:/ISRO LANDIS/Model runs"
-scenario_folder <- "./Models/v2 model templates/"
+scenario_folder <- "D:/ISRO landis/"
+# scenario_folder <- "./Models/v2 model templates/"
 scenarios <- list.dirs(scenario_folder, recursive = FALSE) 
+# scenarios <- scenarios[c(1, 3, 12, 13)]
 
-scenario_types <- c("current","ccsm","canesm","miroc","mri_cgm")
+
+get_mgmt <- function(scenario){
+  list.files(scenario, pattern = "Scenario") %>%
+    pluck(1) %>%
+    as.character() %>%
+    strsplit(x = ., split = "[.]") %>%
+    pluck(1, 1) %>%
+    strsplit(x = ., split = "[_]") %>%
+    pluck(1, 1)
+}
+
+get_climate <- function(scenario){
+  list.files(scenario, pattern = "NECN_Succession") %>%
+    pluck(1) %>%
+    as.character() %>%
+    strsplit(x = ., split = "[.]") %>%
+    pluck(1, 1)
+}
+
+scenario_type <- data.frame(run_name = character(length(scenarios)), 
+                            mgmt = character(length(scenarios)),
+                            climate = character(length(scenarios)))
+
+scenario_type <- scenario_type %>%
+  mutate(run_name = unlist(map(strsplit(scenarios, split = "/"), pluck(4, 1)))) %>%
+  # mutate(mgmt = unlist(map(scenarios, get_mgmt))) %>%
+  mutate(browse = ifelse(grepl(pattern = "no pred", run_name), "Low", 
+                         ifelse(grepl(pattern = "low pred", run_name), "Medium",
+                                "High"))) %>%
+  mutate(climate = ifelse(grepl(pattern = "CANESM", run_name), "Hot/Dry (CanESM2 8.5)",
+                                 ifelse(grepl(pattern = "GFDL", run_name), "Warm (CCSM4 4.5)", 
+                                        ifelse(grepl(pattern = "MRI", run_name), "Hot/Wet (MRI-CGCM3 8.5)", "Present Climate"))))) %>%
+  mutate(browse = factor(browse, levels = c("Low", "Medium", "High")),
+         climate = factor(climate, levels = unique(climate)[c(3,2,1,4,5)])) %>%
+  mutate(fire_model = ifelse(grepl(pattern = "nofire", run_name), "nofire", 
+                             "yesfire")) 
 
 template <- rast("./Models/LANDIS inputs/input rasters/ecoregions.tif")
 

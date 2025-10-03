@@ -1,0 +1,106 @@
+LandisData "BDA Agent"
+
+BDAAgentName		defoliator
+BDPCalibrator		1
+SRDMode			mean
+StartYear		2
+
+>>----------------------------------
+>> BDA DISTURBANE REGIME PARAMETERS
+>>----------------------------------
+
+>>-------- Regional Outbreak Inputs -------------
+OutbreakPattern CyclicNormal<< CyclicNormal or CyclicUniform, or ClimateLibrary 
+Mean			9
+StDev			1
+TimeSinceLastEpidemic	5		<<years
+TemporalType 		variablepulse	<<pulse or variablepulse
+MinROS			0
+MaxROS			3
+
+>>-------- Dispersal Inputs ----------------------
+Dispersal		no		<<yes or no
+DispersalRate		300		<<meters/year
+EpidemicThresh		0.5
+InitialEpicenterNum	7
+OutbreakEpicenterCoeff	0.01
+OutbreakEpicenterThresh 0.0
+SeedEpicenter		no		<<yes or no
+SeedEpicenterMax	3
+SeedEpicenterCoeff	0.5
+DispersalTemplate	24N	<<MaxRadius, 4N,
+					<<8N, 12N, or 24N
+
+>>-------- Neighborhood Resource Inputs -----------
+NeighborFlag	yes	<<yes or no
+NeighborSpeedUp	none	<<none, 2x, 3x, 
+			<<or 4x
+NeighborRadius	250	<<meters
+NeighborShape	uniform	<<uniform, linear, 
+			<<or gaussian
+NeighborWeight	1
+
+>>-- Intensity Class Thresholds --
+>>IntensityClass1_BDP 	0.0 -- Hardwired value
+IntensityClass2_BDP 	0.1
+IntensityClass3_BDP 	0.2
+
+>>EcoregionModifiers
+>> not needed here; only one ecoregion
+>>Ecoregion	Modifier
+>>eco1		0.16
+>>eco2		-0.16
+
+DisturbanceModifiers
+>>Type	Duration	Value
+
+ClimateModifiers
+>> Var 	Source 	Threshold 	Months 	Aggregation 	LagYears Modifier
+>>  temp 	Library >30 		7 	Average 	0 	-99.0
+>>  temp	Library	<4.4		5	Average		0	-99.0
+>>temp	Library	<-11.3		1-2	Average		0	-99.0
+
+BDASpeciesParameters
+>> 								| Susceptibility 						 									  	 | Special
+>>Species 	MinorHost 		2ndHost 		MajorHost		| Class3 			Class2 			Class1 			 | Dead
+>>Name 		Age SRDProb  	Age SRDProb 	Age SRDProb 	| Age MortProb 		Age MortProb 	Age MortProb 	 | Fuel?
+>> -----------------------------------------------------------------------------
+>>see Davidson et al. 1999 review for rankings of susceptibility
+>> mortality comes from "fair" condition trees in Herrick and Gansner
+>>reduced mortality to half of previous values, because we were seeing too much mortality. SF 2024-9-30
+>> around 3% for sugar maples: https://nsrcforest.org/sites/default/files/uploads/yanaifull07.pdf
+>>UMN extension: rarely feeds on red maple or conifers
+>>https://tidcf.nrcan.gc.ca/en/insects/factsheet/9374
+
+>>Primary hosts
+ACSA3		0	.25				20	.5		40	0.75	  		11	0.06		30	0.04		50	0.02			no	
+POGR4		0	.5				20	.75		40	1.0	 			11	0.06		30	0.04		50	0.02			no  
+POTR5		0	.5				20	.75		40	1.0	 			11	0.06		30	0.04		50	0.02			no  
+POBA2		0	.5				20	.75		40	1.0	 			11	0.06		30	0.04		50	0.02			no  
+QURU		0	.5				20	.75		40	1.0	 			11	0.06		30	0.04		50	0.02			no  
+
+>>Secondary hosts
+ACSP2		0	.25				20	.5		40	0.75	  		11	0.03		30	0.02		50	0.01			no	
+BEPA		0	.25				20	.5		40	0.75	  		11	0.03		30	0.02		50	0.01			no
+PRVI		0	.25				20	.5		40	0.75	  		11	0.03		30	0.02		50	0.01			no	
+Shrub		0	.25				20	.5		40	0.75	  		11	0.03		30	0.02		50	0.01			no	
+
+>>spillover damage but poor hosts
+ABBA		0	.1				20	.2		40	0.3	  			11	0.01		999	0.0			999	0.0			no	
+ACRU		0	.1				20	.2		40	0.3	  			11	0.01		999	0.0			999	0.0			no	
+ALIN2		0	.1				20	.2		40	0.3	  			11	0.01		999	0.0			999	0.0			no	
+BEAL2		0	.1				20	.2		40	0.3	  			11	0.01		999	0.0			999	0.0			no	
+CRDO2		0	.1				20	.2		40	0.3	  			11	0.01		999	0.0			999	0.0			no	
+FRNI		0	.1				20	.2		40	0.3	  			11	0.01		999	0.0			999	0.0			no	
+LALA		0	.1				20	.2		40	0.3	  			11	0.01		999	0.0			999	0.0			no	
+PIBA2		0	.1				20	.2		40	0.3	  			11	0.01		999	0.0			999	0.0			no	
+PIGL		0	.1				20	.2		40	0.3	  			11	0.01		999	0.0			999	0.0			no	
+PIMA		0	.1				20	.2		40	0.3	  			11	0.01		999	0.0			999	0.0			no	
+PIST		0	.1				20	.2		40	0.3	  			11	0.01		999	0.0			999	0.0			no	
+PIRE		0	.1				20	.2		40	0.3	  			11	0.01		999	0.0			999	0.0			no	
+SODE3		0	.1				20	.2		40	0.3	  			11	0.01		999	0.0			999	0.0			no	
+THOC2		0	.1				20	.2		40	0.3	  			11	0.01		999	0.0			999	0.0			no	
+
+
+
+IgnoredSpecies

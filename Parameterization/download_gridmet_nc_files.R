@@ -21,4 +21,3 @@ for(i in 1:length(urls)){
                 extra = getOption("download.file.extra"),
                 headers = NULL)
 }
-

@@ -7,13 +7,13 @@ library("terra")
 theme_set(theme_bw())
 
 #what folder do all the runs to be analyzed live in?
-scenario_folder <- "E:/ISRO LANDIS/Model runs"
+# scenario_folder <- "E:/ISRO LANDIS/Model runs"
 # scenario_folder <- "C:/Users/swflake/Documents/LANDIS inputs/"
-# scenario_folder <- "./Models/Model templates"
+scenario_folder <- "./Models/v2 model templates"
 # scenario_folder <- "./Models/Model runs"
 scenarios <- list.dirs(scenario_folder, recursive = FALSE) #%>%
 # `[`(!(grepl("canesm", .)))
-# scenarios <- scenarios[c(1, 4, 5, 6)]
+scenarios <- scenarios[c(4)]
 
 #some helper functions
 read_plus <- function(flnm) {
@@ -82,25 +82,25 @@ browsekill_summaries <- paste0(scenarios, "/browse-event-species-log.csv")  %>%
 spp <- unique(regen_summaries$SpeciesName)
 for(sp in spp){
   p1 <- ggplot(data = filter(biomass_summaries, Species == sp), 
-              mapping = aes(x = Time, y = Biomass/100, colour = browse)) + 
+              mapping = aes(x = Time, y = Biomass/100)) + #, colour = browse
     geom_point(alpha = 0.1) + 
     labs(title = paste(paste0(sp, " aboveground biomass")),
          # subtitle = "by browse scenario and climate scenario",
          y = "Average AGB (Mg/ha)", x = "Timestep") + 
     geom_smooth() +
-    facet_wrap(facets = "climate")+
-    theme(plot.margin = margin(6, 0, 6, 0)) + 
-    guides(colour=guide_legend(title="Predation"))
+    facet_wrap(facets = "run_name")+
+    theme(plot.margin = margin(6, 0, 6, 0)) #+ 
+    # guides(colour=guide_legend(title="Predation"))
   # p1 <- shift_legend2(p1)
   
   p2 <- ggplot(data = filter(browsekill_summaries, SpeciesName == sp), 
-              mapping = aes(x = Time, y = NetRegen, colour = browse)) + 
+              mapping = aes(x = Time, y = NetRegen)) + #, colour = browse
     geom_point(alpha = 0.1) + 
     labs(title = paste(paste0(sp, " net regeneration")),
          # subtitle = "by browse scenario and climate scenario",
          y = "Number of new cohorts", x = "Timestep") + 
     geom_smooth() +
-    facet_wrap(facets = "climate") +
+    facet_wrap(facets = "run_name") +
     geom_hline(yintercept = 0)+
     theme(plot.margin = margin(6, 0, 6, 0)) +
     guides(colour=guide_legend(title="Predation"))

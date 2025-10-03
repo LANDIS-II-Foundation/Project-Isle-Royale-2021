@@ -3,6 +3,7 @@ LandisData "BDA Agent"
 BDAAgentName		spruce_budworm
 BDPCalibrator		1
 SRDMode			mean
+StartYear		2
 
 >>----------------------------------
 >> BDA DISTURBANE REGIME PARAMETERS

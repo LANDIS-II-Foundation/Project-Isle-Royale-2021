@@ -1,0 +1,104 @@
+LandisData  "SCRAPPLE"
+<< updated by Sam Flake to better represent TCSI fire regime and influence of fuels. 
+
+Timestep                            1
+
+Species_CSV_File	"../../LANDIS Inputs/scrpple/SCRPPLE_spp_isro.csv"
+
+AccidentalIgnitionsMap     	"../../LANDIS inputs/scrpple/accidental_ignitions_constant.tif" <<updated sf 2024-3-13
+LightningIgnitionsMap  		"../../LANDIS inputs/scrpple/lightning_ignitions_constant.tif" <<updated sf 2024-3-13
+RxIgnitionsMap  		"../../LANDIS inputs/scrpple/rx_constant.tif" 
+
+AccidentalSuppressionMap	"../../LANDIS inputs/scrpple/suppression_zones.tif" <<updated sf 2024-9-19
+LightningSuppressionMap		"../../LANDIS inputs/scrpple/suppression_zones.tif" <<updated sf 2024-9-19
+RxSuppressionMap		"../../LANDIS inputs/scrpple/rx_constant.tif"  <<NEED
+
+GroundSlopeMap			"../../LANDIS inputs/scrpple/slope.tif"		
+UphillSlopeAzimuthMap  		"../../LANDIS inputs/scrpple/upslope.tif"	
+ClayMap 			"../../LANDIS inputs/input rasters/clay.tif"
+
+>>>>>>>> Ignition count model <<<<<<<< 
+<< sf 2024-3-14 -- initial setting from short database, using short data from ISRO
+LightningIgnitionsB0 -100
+LightningIgnitionsB1  0.07667
+AccidentalIgnitionsB0  -100
+AccidentalIgnitionsB1  0.06601
+IgnitionDistribution Poisson << Poisson or ZeroInflatedPoisson
+
+>> Maximum fuels <<<<<<<<<<<<<<<<<<<<
+MaximumFineFuels 1000 <<Set to 1000 to match typical maximum fine fuels from LANDIS model, sf 2021-11-11; Originally 5400, Derived from Fuel Loadings with Jonathan Long
+MaximumLadderFuels 1250 
+
+>>>>>>> Prescribed Fire Parameters <<<<<<<<<<<<<<<<<<
+>> TODO update as part of management scenarios
+MaximumRxWindSpeed 11
+MaximumRxFireWeatherIndex 42.0
+MinimumRxFireWeatherIndex 6.0
+MaximumRxTemperature 32.0	<< Optional
+MinimumRxRelativeHumidity 22.0	<< Optional
+MaximumRxFireIntensity 1
+NumberRxAnnualFires 0
+NumberRxDailyFires 1
+FirstDayRxFires 10
+LastDayRxFires 350
+TargetRxSize 40
+
+>>>>>>> Maximum spread area parameters <<<<<<<<<<<<<<<<<<<<<<<
+>> borrowed from TCSI, TODO revise as needed
+MaximumSpreadAreaB0	-71 
+MaximumSpreadAreaB1	17.5 <<-3 <<FWI
+MaximumSpreadAreaB2	10.6 <<-2.5  <<effective wind speed
+
+>> Spread parameters <<<<<<<<<<<<<<<<<<<<<<<<<<<
+>> borrowed from TCSI, TODO revise with new spread data
+SpreadProbabilityB0 -2.8 <<-2.6
+SpreadProbabilityB1 0.0207766 <<FWI
+SpreadProbabilityB2  0.5442314 << relativized fine fuels. 
+SpreadProbabilityB3 0.0907120 << effective wind speed.
+
+>> Intensity (SiteMortality) parameters <<<<<<<<<<<<<<<<<<<<<<<<<<<< 
+<<borrowed from TCSI, TODO revise these with new MTBS data
+SiteMortalityLink identity
+SiteMortalityB0 -300 << Intercept
+SiteMortalityB1	0	<< Clay
+SiteMortalityB2	0	<< Previous PET
+SiteMortalityB3	16 <<Effective wind speed
+SiteMortalityB4	0	<<Climatic water deficit
+SiteMortalityB5	0	<<Fine fuel (proportion)
+SiteMortalityB6	0.3 <<Ladder fuel (g m-2)
+SiteMortalityB7	4.5 <<FWI
+
+>>>>>> Cohort mortality parameters <<<<<<<<<<<<<<<<<<<<< <<TODO borrowed from TCSI
+CohortMortalityB0 -0.73 << Intercept
+CohortMortalityB1 -0.9 << The parameter fit for the relationship between bark thickness and cohort mortality.
+CohortMortalityB2  0.008 << The parameter fit for the relationship between site mortality and cohort mortality. 
+
+>>>>>>> Ladder fuel parameters <<<<<<<<<<<<<<<<<<<<<<<<<<
+LadderFuelMaxAge 40
+
+LadderFuelSpeciesList <<TODO just conifers and shrubs at the moment -- revisit this
+ABBA
+LALA
+PIBA2
+PIGL
+PIMA
+PIST
+PIRE
+THOC2
+Shrub
+
+
+>>>>>>>> Suppression parameters <<<<<<<<<<<<<<<<<<<<
+SuppressionMaxWindSpeed 15
+Suppression_CSV_File "../../LANDIS inputs/scrpple/Suppression_Input_updated.csv" <<updated sf 2024-9-19
+
+>>>>>>>> Dead wood table <<<<<<<<<<<<<<<<<<
+DeadWoodTable
+ABBA		40
+LALA		40
+PIBA2		40
+PIGL		40
+PIMA		40
+PIST		40
+PIRE		40
+THOC2		40

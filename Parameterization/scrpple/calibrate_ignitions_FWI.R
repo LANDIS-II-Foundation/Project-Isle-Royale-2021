@@ -1,6 +1,5 @@
-
 ##---------------------------------------------------------------------------------
-# Attempt #2
+# Fit statistical model to number of ignitions ~ FWI 
 library("tidyverse")
 library("tidyselect")
 library("sf")

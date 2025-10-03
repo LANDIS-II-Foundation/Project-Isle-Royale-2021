@@ -1,0 +1,69 @@
+LandisData "NECN Succession"	<<"NECN Succession"
+>>v3.1
+Timestep  1
+
+SeedingAlgorithm  WardSeedDispersal
+
+InitialCommunities      			"../../LANDIS inputs/Spunup inputs/initial_communities_pointer_spun_up.txt"
+InitialCommunitiesMap   			"../../LANDIS inputs/Spunup inputs/output-community-20.img"
+ClimateConfigFile					"../../LANDIS inputs/NECN files/climate-generator-GFDL-ESM2M4-5_scr.txt"
+
+SoilDepthMapName					"../../LANDIS inputs/input rasters/soil_depth.tif" 
+SoilDrainMapName					"../../LANDIS inputs/input rasters/soil_drain.tif"
+SoilBaseFlowMapName					"../../LANDIS inputs/input rasters/baseflow.tif"  
+SoilStormFlowMapName				"../../LANDIS inputs/input rasters/stormflow.tif" 
+SoilFieldCapacityMapName			"../../LANDIS inputs/input rasters/field_capacity.tif"
+SoilWiltingPointMapName				"../../LANDIS inputs/input rasters/wilt_point.tif"
+SoilPercentSandMapName				"../../LANDIS inputs/input rasters/sand.tif"
+SoilPercentClayMapName				"../../LANDIS inputs/input rasters/clay.tif"
+InitialSOM1CsurfMapName				"../../LANDIS inputs/Spunup inputs/SOM1Csurface-20.img" 
+InitialSOM1NsurfMapName				"../../LANDIS inputs/Spunup inputs/SOM1Nsurface-20.img"
+InitialSOM1CsoilMapName				"../../LANDIS inputs/Spunup inputs/SOM1Csoil-20.img" 
+InitialSOM1NsoilMapName				"../../LANDIS inputs/Spunup inputs/SOM1Nsoil-20.img"
+InitialSOM2CMapName					"../../LANDIS inputs/Spunup inputs/SOM2C-20.img" 
+InitialSOM2NMapName					"../../LANDIS inputs/Spunup inputs/SOM2N-20.img" 
+InitialSOM3CMapName					"../../LANDIS inputs/Spunup inputs/SOM3C-20.img"
+InitialSOM3NMapName					"../../LANDIS inputs/Spunup inputs/SOM3N-20.img"
+InitialDeadWoodSurfaceMapName		"../../LANDIS inputs/Spunup inputs/DeadWoodBiomass-20.img" 
+InitialDeadCoarseRootsMapName		"../../LANDIS inputs/Spunup inputs/DeadRootBiomass-20.img"
+
+CalibrateMode 	no
+SmokeModelOutputs no
+WaterDecayFunction Linear <<Linear or Ratio
+
+ProbabilityEstablishAdjust 	0.2
+InitialMineralN				2.0
+InitialFineFuels			0.2 <<this can add a bunch of leaves at the beginning of the model run if it's too high
+AtmosphericNSlope			-0.000109 <<updated for ISRO 2021-12-20
+AtmosphericNIntercept		0.0589 <<updated for ISRO 2021-12-20
+Latitude					48
+DenitrificationRate			0.061 <<from Zachary's Southern Apps project
+DecayRateSurf				1.9
+DecayRateSOM1				1.7
+DecayRateSOM2				0.0075
+DecayRateSOM3				0.00010
+		
+SpeciesParameters "../../LANDIS inputs/NECN files/NECN_Spp_table_inv_necn7_v2.csv"
+
+FunctionalGroupParameters "../../LANDIS inputs/NECN files/NECN_Functional_Table_necnv7_v2.csv"
+									
+FireReductionParameters
+>> Updated 3/10/2022 by Sam Flake.
+>> See documentation for TCSI model
+>>	Severity	WoodLitter	Litter	  Cohort Wood 	Cohort Litter 		SOM
+>>	Fire		Reduct		Reduct	  Reduction	   Reduction		Reduction
+	1		0.50		0.25	  		0			0.1				0.25 
+	2		0.62		0.5 	  		0.1			0.1				0.5
+	3		0.75		0.75			0.15		0.5				0.75
+	4		0.85		0.85			0.2			0.65			0.85 
+	5		0.95		0.95			0.2			0.75			0.95
+	6		0.99		0.99			0.2			1.0				0.99
+	7		1.0			1.0				0.2			1.0				1.0
+	8		1.0			1.0				0.2			1.0				1.0
+	9		1.0			1.0				0.3			1.0				1.0
+	10		1.0			1.0				0.3			1.0				1.0
+
+
+HarvestReductionParameters
+>>	Name			WoodLitter	Litter	SOM		CohortWood	CohortLeaf
+>>				Reduct		Reduct	Reduction	Removal		Removal

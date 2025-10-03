@@ -1,7 +1,8 @@
 # create stack of annual mtbs fire severity mosaic
 
-library("raster")
+library("terra")
 library("sf")
+library("tidyverse")
 
 
 #get all the mtbs data to use for fire severity => combustion buoyancy
@@ -21,41 +22,52 @@ library("sf")
 # )
 
 
+region <- sf::st_read("D:/Data/epa_ecoregions/us_eco_l3/us_eco_l3.shp") %>%
+  filter(US_L3CODE %in% c(50,51)) %>%
+  sf::st_union()%>%
+  sf::st_transform("EPSG:5070") %>%
+  sf::st_as_sf()
+region_wgs <- region %>%
+  sf::st_transform(crs = "+proj=longlat +datum=WGS84 +no_defs")
+
+
+template <- rast("./Models/LANDIS inputs/input rasters/ecoregions_inv.tif")
+terra::values(template) <- 1
+
+#make a template for the whole sierra
+region_template <- terra::project(template, )
+ext(region_template) <- ext(region)
+res(region_template) <- res(template)
+values(region_template) <- 1
+
 mask <- terra::rast("./Models/LANDIS inputs/input rasters/ecoregions_inv.tif")
 crs(mask)
 poly_bound <- sf::st_read("./Parameterization/Parameterization data/isle_royale_boundary_buffer/isle_royale_boundary_buffer.shp")%>%
   sf::st_union()%>%
   sf::st_transform(crs = crs(mask))
 
-#geomac data are in EPSG:4269 or EPSG:4326
-region <- sf::st_read("D:/Data/epa_ecoregions/us_eco_l3/us_eco_l3.shp") %>%
-  filter(US_L3CODE %in% c(50,51)) %>%
-  sf::st_union()%>%
-  sf::st_transform(crs = crs(mask))
 
-
-template <- raster("./masks_boundaries/mask.tif")
-values(template) <- 1
-tcsi_poly <- sf::st_read("./masks_boundaries/tcsi_area_shapefile/TCSI_v2.shp") %>%
-  sf::st_zm() %>%
-  sf::st_transform(crs(template))
 
 #where are the files? Path to all .tifs
-mtbs_files <- paste0("./calibration data/mtbs/severity_mosaic/composite_data/MTBS_BSmosaics/", 2000:2019, "/mtbs_CONUS_", 2000:2019, ".tif")
+mtbs_files <- paste0("D:/Data/mtbs_isro/MTBS_BSmosaics/", 2000:2022, "/mtbs_CONUS_", 2000:2022, ".tif")
 
 #import all mtbs years
 # they can't be raster::stacked because the extents are inexplicably different for each year
-mtbs <- lapply(mtbs_files, raster)
+mtbs <- lapply(mtbs_files, rast)
 
 #reproject vector to match raster
-tcsi_poly_reproject <- sf::st_transform(tcsi_poly, crs = crs(mtbs[[1]]))
+region_poly_reproject <- sf::st_transform(region, crs = crs(mtbs[[1]]))
+
 
 # crop rasters to study area and coarsen resolution to match project files
 # this is slow, maybe could be optimized
-mtbs <- mtbs %>%
-  purrr::map( ~ crop(.x, tcsi_poly_reproject)) %>%
-  purrr::map( ~ raster::aggregate(.x, fact = 6, fun = mean)) %>%
-  purrr::map( ~ projectRaster(.x, to = template)) %>%
-  stack()
+mtbs2 <- mtbs %>%
+  purrr::map( ~ terra::crop(.x, region_poly_reproject)) %>%
+  purrr::map( ~ terra::aggregate(.x, fact = 2, fun = mean, na.rm = TRUE))
 
-writeRaster(mtbs, "./calibration data/mtbs/severity_mosaic/combined_mosaic.tif", overwrite = TRUE)
+mtbs_reprojected <- mtbs2[[17]] %>%
+  purrr::map( ~ terra::project(.x, region_template))
+
+
+
+writeRaster(mtbs, "D:/Data/mtbs_isro/MTBS_BSmosaics/combined_mosaic.tif", overwrite = TRUE)
